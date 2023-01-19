@@ -1,6 +1,12 @@
 import icons from "./icons";
 
-const { MdOutlineLibraryMusic } = icons;
+const {
+  MdOutlineLibraryMusic,
+  GrEmptyCircle,
+  FiPieChart,
+  IoIosRadio,
+  BsMusicPlayer,
+} = icons;
 
 export const sidebarMenu = [
   {
@@ -12,21 +18,21 @@ export const sidebarMenu = [
     path: "",
     text: "Khám Phá",
     end: true,
-    icons: <MdOutlineLibraryMusic size={21} />,
+    icons: <GrEmptyCircle size={21} />,
   },
   {
     path: "/zing-chart",
     text: "#zingchart",
-    icons: <MdOutlineLibraryMusic size={21} />,
+    icons: <FiPieChart size={21} />,
   },
   {
     path: "radio",
     text: "Radio",
-    icons: <MdOutlineLibraryMusic size={21} />,
+    icons: <IoIosRadio size={21} />,
   },
   {
     path: "follow",
     text: "Theo Dõi",
-    icons: <MdOutlineLibraryMusic size={21} />,
+    icons: <BsMusicPlayer size={21} />,
   },
 ];
