@@ -4,37 +4,6 @@ import { getArrSlider } from "../untils/fn";
 
 const Slider = () => {
   const { banner } = useSelector((state) => state.app);
-
-  // useEffect(() => {
-  //   const sliderEls = document.getElementsByClassName("slider-item");
-  //   let min = 0;
-  //   let max = 2;
-
-  //   const intervalId = setInterval(() => {
-  //     console.log(1);
-  //     for (let i = 0; i < sliderEls.length; i++) {
-  //       if ((i <= max && i >= min) || (i <= min && i >= max)) {
-  //         sliderEls[i].style.cssText = "display:none";
-  //       } else {
-  //         sliderEls[i].style.cssText = "display:block";
-  //       }
-  //     }
-  //     if (min === 5) {
-  //       min = 0;
-  //     } else {
-  //       min += 1;
-  //     }
-  //     if (max === 5) {
-  //       max = 0;
-  //     } else {
-  //       max += 1;
-  //     }
-  //     console.log({ min, max });
-  //   }, 1000);
-  //   return () => {
-  //     intervalId && clearInterval(intervalId);
-  //   };
-  // }, []);
   useEffect(() => {
     const sliderEls = document.getElementsByClassName("slider-item");
     let min = 0;
@@ -90,20 +59,24 @@ const Slider = () => {
       });
       min = min === sliderEls.length - 1 ? 0 : min + 1;
       max = max === sliderEls.length - 1 ? 0 : max + 1;
-    }, 3000);
+    }, 5000);
     return () => {
       intervalId && clearInterval(intervalId);
     };
   }, []);
   return (
-    <div className="flex gap-4 w-full overflow-hidden px-[59px] pt-[32px]">
-      {banner?.map((item) => (
-        <img
-          src={item.banner}
-          alt=""
-          className="slider-item flex-1 object-contain w-1/3 rounded-lg"
-        />
-      ))}
+    <div className="w-full overflow-hidden px-[59px]">
+      <div className="flex w-full gap-8 pt-[32px]">
+        {banner?.map((item, index) => (
+          <img
+            src={item.banner}
+            alt=""
+            className={`slider-item flex-1 object-contain w-[30%] rounded-lg ${
+              index <= 2 ? "block" : "hidden"
+            }`}
+          />
+        ))}
+      </div>
     </div>
   );
 };
