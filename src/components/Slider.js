@@ -1,9 +1,12 @@
 import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { getArrSlider } from "../untils/fn";
+import * as actions from '../store/actions'
 
 const Slider = () => {
   const { banner } = useSelector((state) => state.app);
+  const dispatch = useDispatch()
+
   useEffect(() => {
     const sliderEls = document.getElementsByClassName("slider-item");
     let min = 0;
@@ -64,13 +67,22 @@ const Slider = () => {
       intervalId && clearInterval(intervalId);
     };
   }, []);
+
+  const handleClickBanner = (item) => {
+    console.log(item);
+
+    if (item?.type === 1) {
+      dispatch(actions.setCurSongId(item.encodeId))
+    }
+  };
   return (
     <div className="w-full overflow-hidden px-[59px]">
       <div className="flex w-full gap-8 pt-[32px]">
         {banner?.map((item, index) => (
           <img
+            key={index}
             src={item.banner}
-            alt=""
+            onClick={() => handleClickBanner(item)}
             className={`slider-item flex-1 object-contain w-[30%] rounded-lg ${
               index <= 2 ? "block" : "hidden"
             }`}
