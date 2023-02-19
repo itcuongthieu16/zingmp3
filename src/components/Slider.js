@@ -7,10 +7,9 @@ import { useNavigate } from "react-router-dom";
 const Slider = () => {
   const { banner } = useSelector((state) => state.app);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const navigate = useNavigate()
-
-  // Animation o banner
+  // ainimation for banner
   useEffect(() => {
     const sliderEls = document.getElementsByClassName("slider-item");
     let min = 0;
@@ -66,7 +65,7 @@ const Slider = () => {
       });
       min = min === sliderEls.length - 1 ? 0 : min + 1;
       max = max === sliderEls.length - 1 ? 0 : max + 1;
-    }, 5000);
+    }, 3000);
     return () => {
       intervalId && clearInterval(intervalId);
     };
@@ -76,17 +75,20 @@ const Slider = () => {
     if (item?.type === 1) {
       dispatch(actions.setCurSongId(item.encodeId));
       dispatch(actions.play(true));
-    } else if (item.type === 4) {
-      const albumPath = item?.link?.split('.')[0]
-      navigate(albumPath)
+    } else if (item?.type === 4) {
+      // console.log(item);
+      const albumPath = item?.link?.split(".")[0];
+      navigate(albumPath);
     }
+    console.log(item);
   };
+
   return (
     <div className="w-full overflow-hidden px-[59px]">
-      <div className="flex w-full gap-8 pt-[32px]">
+      <div className="flex w-full gap-8 pt-8">
         {banner?.map((item, index) => (
           <img
-            key={index}
+            key={item.encodeId}
             src={item.banner}
             onClick={() => handleClickBanner(item)}
             className={`slider-item flex-1 object-contain w-[30%] rounded-lg ${

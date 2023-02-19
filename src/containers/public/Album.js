@@ -4,18 +4,19 @@ import { useParams } from "react-router-dom";
 import * as apis from "../../apis";
 import moment from "moment/moment";
 import { Lists } from "../../components";
+import { Scrollbars } from "react-custom-scrollbars-2";
 
 const Album = () => {
   const { pid } = useParams();
+  // console.log(pid);
 
   const [playlistData, setPlaylistData] = useState({});
   // console.log(playlistData.song.items);
 
-
   useEffect(() => {
     const fetchDetailPlayList = async () => {
       const response = await apis.apiGetDetailPlaylist(pid);
-      console.log(response);
+      // console.log(response);
 
       if (response?.data.err === 0) {
         setPlaylistData(response.data?.data);
@@ -25,7 +26,7 @@ const Album = () => {
   }, [pid]);
 
   return (
-    <div className="flex gap-8 w-full px-[59px]">
+    <div className="flex gap-8 w-full px-[59px] h-full">
       <div className="flex-none w-1/4 flex flex-col items-center gap-2">
         <img
           src={playlistData?.thumbnailM}
@@ -52,13 +53,18 @@ const Album = () => {
           </span>
         </div>
       </div>
-      <div className="flex-auto overflow-y-scroll">
-        <span>
-          <span className="text-gray-600 text-[14px]">Lời tựa </span>
-          <span className="text-[14px]">{playlistData?.description}</span>
-        </span>
-        <Lists songs={playlistData?.song?.items} totalDuration={playlistData?.song?.totalDuration} />
-      </div>
+      <Scrollbars style={{ width: "100%", height: "70%" }}>
+        <div className="flex-auto mb-40">
+          <span>
+            <span className="text-gray-600 text-[14px]">Lời tựa </span>
+            <span className="text-[14px]">{playlistData?.description}</span>
+          </span>
+          <Lists
+            songs={playlistData?.song?.items}
+            totalDuration={playlistData?.song?.totalDuration}
+          />
+        </div>
+      </Scrollbars>
     </div>
   );
 };

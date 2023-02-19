@@ -1,4 +1,3 @@
-// musicReducer: Lưu những cái state, biến có giá trị thông tin của app(VD: màu sắc, ....)
 import actionTypes from "../actions/actionTypes";
 
 const initState = {
@@ -8,7 +7,7 @@ const initState = {
 
 const musicReducer = (state = initState, action) => {
   switch (action.type) {
-    case actionTypes.SET_CUR_SONG:
+    case actionTypes.SET_CUR_SONG_ID:
       return {
         ...state,
         curSongId: action.sid || null,
@@ -18,6 +17,7 @@ const musicReducer = (state = initState, action) => {
         ...state,
         isPlaying: action.flag,
       };
+
     default:
       return state;
   }

@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import * as apis from "../apis";
 import icons from "../untils/icons";
+import * as actions from "../store/actions";
 
 const {
   AiFillHeart,
@@ -19,12 +20,14 @@ const {
 } = icons;
 
 const Player = () => {
-  const audio = new Audio()
+  const audioEl = useRef(new Audio());
 
   const { curSongId, isPlaying } = useSelector((state) => state.music);
-  const [songInfo, setSongInfo] = useState(null);
 
+  const [songInfo, setSongInfo] = useState(null);
   const [source, setSource] = useState(null);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchDetailSong = async () => {
@@ -44,10 +47,29 @@ const Player = () => {
     fetchDetailSong();
   }, [curSongId]);
 
-  useEffect(() => {}, [curSongId]);
+  console.log(source);
+
+  useEffect(() => {
+    audioEl.current.pause();
+    audioEl.current.src = source;
+    audioEl.current.load();
+    if (isPlaying) {
+      audioEl.current.play();
+    } else {
+      audioEl.current.pause();
+    }
+  }, [curSongId, source]);
 
   const handleTogglePlayMusic = () => {
-    // audio.play()
+    if (isPlaying) {
+      // console.log("Pause");
+      audioEl.current.pause();
+      dispatch(actions.play(false));
+    } else {
+      // console.log("Play");
+      audioEl.current.play();
+      dispatch(actions.play(true));
+    }
   };
   return (
     <div className="bg-main-400 px-5 h-full flex">
@@ -86,11 +108,7 @@ const Player = () => {
             onClick={handleTogglePlayMusic}
             className="hover:text-main-500 cursor-pointer text-100"
           >
-            {isPlaying ? (
-              <MdPauseCircleOutline size={38} />
-            ) : (
-              <MdPlayCircleOutline size={38} />
-            )}
+            {isPlaying ? <BiPause size={38} /> : <BiPlay size={38} />}
           </span>
           <span className="cursor-pointer">
             <MdSkipNext size={20} />

@@ -1,9 +1,7 @@
-// appReducer: Lưu những cái state, biến có giá trị thông tin của app(VD: màu sắc, ....)
 import actionTypes from "../actions/actionTypes";
 
 const initState = {
   banner: [],
-
 };
 
 const appReducer = (state = initState, action) => {
@@ -11,7 +9,9 @@ const appReducer = (state = initState, action) => {
     case actionTypes.GET_HOME:
       return {
         ...state,
-        banner: action.homeData?.find(item => item.sectionType === 'banner')?.items || null
+        banner:
+          action.homeData?.find((item) => item.sectionType === "banner")
+            ?.items || null,
       };
 
     default:

@@ -6,7 +6,7 @@ import {
 import { GrEmptyCircle } from "react-icons/gr";
 import { FiPieChart, FiMusic } from "react-icons/fi";
 import { IoIosRadio } from "react-icons/io";
-import { BsMusicPlayer } from "react-icons/bs";
+import { BsMusicPlayer, BsDot } from "react-icons/bs";
 import { BsArrowLeft, BsThreeDots } from "react-icons/bs";
 import { BsArrowRight } from "react-icons/bs";
 import { BiUserCircle, BiPlay, BiPause } from "react-icons/bi";
@@ -41,7 +41,8 @@ const icons = {
   MdPlayCircleOutline,
   MdPauseCircleOutline,
   FiMusic,
-  TbArrowsSort
+  TbArrowsSort,
+  BsDot
 };
 
 export default icons;
