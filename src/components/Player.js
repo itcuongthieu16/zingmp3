@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import * as apis from "../apis";
 import icons from "../untils/icons";
 import * as actions from "../store/actions";
+import { duration } from "moment";
 
 const {
   AiFillHeart,
@@ -18,14 +19,14 @@ const {
   MdPlayCircleOutline,
   MdPauseCircleOutline,
 } = icons;
-
+var intervalId;
 const Player = () => {
-  const audioEl = useRef(new Audio());
-
   const { curSongId, isPlaying } = useSelector((state) => state.music);
 
   const [songInfo, setSongInfo] = useState(null);
-  const [source, setSource] = useState(null);
+  const [audio, setAudio] = useState(new Audio());
+
+  const thumbRef = useRef();
 
   const dispatch = useDispatch();
 
@@ -35,39 +36,51 @@ const Player = () => {
         apis.apiGetDetailSong(curSongId),
         apis.apiGetSong(curSongId),
       ]);
+
+      console.log({ res1: res1 });
       if (res1.data.err === 0) {
         setSongInfo(res1.data.data);
       }
 
       if (res2.data.err === 0) {
-        setSource(res2.data.data["128"]);
+        audio.pause();
+        setAudio(new Audio(res2.data.data["128"]));
       }
     };
 
     fetchDetailSong();
   }, [curSongId]);
 
-  console.log(source);
+  useEffect(() => {
+    if (isPlaying) {
+      intervalId = setInterval(() => {
+        let percent =
+          Math.round((audio.currentTime / songInfo.duration) * 10000) / 100;
+        thumbRef.current.style.cssText = `right: ${100 - percent}%`;
+      }, 200);
+    } else {
+      intervalId && clearInterval(intervalId);
+    }
+  }, [isPlaying]);
 
   useEffect(() => {
-    audioEl.current.pause();
-    audioEl.current.src = source;
-    audioEl.current.load();
+    audio.pause();
+    audio.load();
     if (isPlaying) {
-      audioEl.current.play();
+      audio.play();
     } else {
-      audioEl.current.pause();
+      audio.pause();
     }
-  }, [curSongId, source]);
+  }, [audio]);
 
   const handleTogglePlayMusic = () => {
     if (isPlaying) {
       // console.log("Pause");
-      audioEl.current.pause();
+      audio.pause();
       dispatch(actions.play(false));
     } else {
       // console.log("Play");
-      audioEl.current.play();
+      audio.play();
       dispatch(actions.play(true));
     }
   };
@@ -117,7 +130,14 @@ const Player = () => {
             <IoIosRepeat size={25} />
           </span>
         </div>
-        <div>Progress bar</div>
+        <div className="w-full">
+          <div className="w-3/4 m-auto relative h-[3px] bg-[rgba(0,0,0,0.1)] rounded-l-full rounded-r-full">
+            <div
+              ref={thumbRef}
+              className="absolute top-0 left-0 h-[3px] bg-[#0e8080] rounded-l-full rounded-r-full"
+            ></div>
+          </div>
+        </div>
       </div>
       <div className="w-[30%] flex-auto">Volume</div>
     </div>
